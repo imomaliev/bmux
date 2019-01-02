@@ -4,6 +4,7 @@
   "description": "Browser/Terminal multiplexer",
   "main": "main.js",
   "scripts": {
+    "compile": "browserify client.js -t babelify -o static/bundle.js",
     "start": "babel-node server.js"
   },
   "repository": "https://github.com/imomaliev/bmux",
@@ -25,6 +26,8 @@
     "@babel/core": "^7.2.2",
     "@babel/node": "^7.2.2",
     "@babel/preset-env": "^7.2.3",
+    "babelify": "^10.0.0",
+    "browserify": "^16.2.3",
     "electron": "^4.0.0"
   }
 }
