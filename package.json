@@ -1,0 +1,21 @@
+{
+  "name": "bmux",
+  "version": "0.0.1",
+  "description": "Browser/Terminal multiplexer",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": "https://github.com/imomaliev/bmux",
+  "keywords": [
+    "Electron",
+    "Tmux",
+    "Browser",
+    "Multiplexer"
+  ],
+  "author": "Sardorbek Imomaliev",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^4.0.0"
+  }
+}
