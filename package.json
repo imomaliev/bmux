@@ -4,7 +4,7 @@
   "description": "Browser/Terminal multiplexer",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "babel-node server.js"
   },
   "repository": "https://github.com/imomaliev/bmux",
   "keywords": [
@@ -15,7 +15,16 @@
   ],
   "author": "Sardorbek Imomaliev",
   "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.16.0",
+    "ws": "^6.1.2"
+  },
   "devDependencies": {
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.2.2",
+    "@babel/node": "^7.2.2",
+    "@babel/preset-env": "^7.2.3",
     "electron": "^4.0.0"
   }
 }
