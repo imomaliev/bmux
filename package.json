@@ -17,11 +17,10 @@
   "author": "Sardorbek Imomaliev",
   "license": "MIT",
   "dependencies": {
-    "ansi_up": "^3.0.0",
     "cors": "^2.8.5",
     "express": "^4.16.0",
-    "terminal.js": "^1.0.10",
-    "ws": "^6.1.2"
+    "ws": "^6.1.2",
+    "xterm": "^3.10.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.2.3",

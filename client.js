@@ -1,50 +1,59 @@
 import ws from 'ws';
-import {ansi_to_html, escape_for_html} from 'ansi_up';
-import Terminal from 'terminal.js';
+import { Terminal } from 'xterm';
+import * as attach from 'xterm/lib/addons/attach/attach';
+import * as fit from 'xterm/lib/addons/fit/fit';
+import * as fullscreen from 'xterm/lib/addons/fullscreen/fullscreen';
+
+
+// document.addEventListener("DOMContentLoaded", () => {
+Terminal.applyAddon(attach);
+// Terminal.applyAddon(fit);
+Terminal.applyAddon(fullscreen);
 
 const socket = new WebSocket('ws://localhost:3000');
-const terminal = new Terminal({ columns: 100, rows: 30 });
+const terminal = new Terminal();
+terminal.open(document.getElementById('terminal'));
+terminal.toggleFullScreen(true);
+// terminal.fit();
+// window.scrollTo(0,document.querySelector("#terminal").scrollHeight);
+
 
 socket.onmessage = function (event) {
   event.data.toString('utf-8').split('\n').forEach(line => {
     if (line.startsWith("%output")) {
       line = line.replace(/%output %\d+ /, '');
-      line = line.replace(/\\(\d+)/g, (_, match) => String.fromCharCode(parseInt(match, 8)))
+      line = line.replace(/\\(\d+)/g, (_, match) => String.fromCharCode(parseInt(match, 8)));
       terminal.write(line);
-
-      document.querySelector('.output').innerHTML = terminal.toString('html');
     }
   });
 };
 
-document.addEventListener('keydown', (event) => {
-  event.preventDefault();
-
-  let keyToSend = event.key;
-
-  if (keyToSend === 'Backspace') {
-    keyToSend = 'BSpace';
+terminal.on('key', (key, event) => {
+  if (key === 'Backspace') {
+    key = 'BSpace';
   }
 
-  if (keyToSend === ' ') {
-    keyToSend = 'Space';
+  if (key === ' ') {
+    key = 'Space';
   }
 
-  if (keyToSend === '"') {
-    keyToSend = '\"'
+  if (key === '"') {
+    key = '\"'
   }
 
-  if (keyToSend === 'Control' || keyToSend === 'Shift') {
+  if (key === 'Control' || key === 'Shift' || key === 'Meta') {
     return;
   }
 
-  if (keyToSend.startsWith('Arrow')) {
-    keyToSend = keyToSend.replace('Arrow', '');
+  if (key.startsWith('Arrow')) {
+    key = key.replace('Arrow', '');
   }
 
   if (event.ctrlKey) {
-    keyToSend = `C-${keyToSend}`;
+    key = `C-${key}`;
   }
 
-  socket.send(keyToSend);
+  socket.send(key);
 });
+
+// });
