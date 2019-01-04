@@ -61,4 +61,4 @@ typings/
 .next
 
 # Project
-static/
+dist/

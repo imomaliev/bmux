@@ -2,10 +2,11 @@
   "name": "bmux",
   "version": "0.0.1",
   "description": "Browser/Terminal multiplexer",
-  "main": "main.js",
+  "main": "dist/main.js",
   "scripts": {
-    "compile": "browserify client.js -t babelify -o static/bundle.js",
-    "start": "babel-node server.js"
+    "compile": "browserify renderer.js -t babelify -o dist/renderer.js && babel main.js -o dist/main.js",
+    "watch": "watchify client.js -t babelify -o dist/bundle.js",
+    "start": "npm run compile && electron ."
   },
   "repository": "https://github.com/imomaliev/bmux",
   "keywords": [
@@ -29,6 +30,8 @@
     "@babel/preset-env": "^7.2.3",
     "babelify": "^10.0.0",
     "browserify": "^16.2.3",
-    "electron": "^4.0.0"
+    "electron": "^4.0.0",
+    "nodemon": "^1.18.9",
+    "watchify": "^3.11.0"
   }
 }
