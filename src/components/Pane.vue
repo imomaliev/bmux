@@ -1,9 +1,18 @@
+<template>
+  <div id="terminal"></div>
+</template>
+
+<script lang="ts">
+import { Component, Prop, Vue } from 'vue-property-decorator';
+
 // This file is required by the index.html file and will
 // be executed in the renderer process for that window.
 // All of the Node.js APIs are available in this process.
 
 import ws from 'ws';
 import { Terminal } from 'xterm';
+import '../../node_modules/xterm/dist/xterm.css'
+
 import * as attach from 'xterm/lib/addons/attach/attach';
 import * as fit from 'xterm/lib/addons/fit/fit';
 import * as fullscreen from 'xterm/lib/addons/fullscreen/fullscreen';
@@ -76,3 +85,13 @@ terminal.on('key', (key, event) => {
 });
 
 // });
+
+@Component
+export default class Pane extends Vue {
+  @Prop() private msg!: string;
+}
+</script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped>
+</style>

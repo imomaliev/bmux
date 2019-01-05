@@ -5,17 +5,68 @@ import {
   createProtocol,
   installVueDevtools
 } from 'vue-cli-plugin-electron-builder/lib'
+
+
+import ws from 'ws';
+import express from 'express';
+import cors from 'cors';
+import http from 'http';
+import childProcess from 'child_process';
+
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win
 
+const expressApp = express();
+
+expressApp.use('/static', express.static('static'));
+expressApp.use(cors());
+
+expressApp.get('/', function (req, res) {
+  res.sendFile(__dirname + '/index.html')
+});
+
+const server = http.createServer(expressApp);
+server.listen(3000);
+
+const socketServer = new ws.Server({server});
+
+
+socketServer.on('connection', (socket) => {
+  const tmux = childProcess.spawn('tmux', ['-C', 'attach', '-t', 'bmux2'], {tmux: true});
+
+  socket.on('message', (message) => {
+    console.log('received:', JSON.stringify(message));
+    tmux.stdin.write(message + '\n');
+  });
+
+  socket.on('close', () => {
+    tmux.kill();
+  });
+
+  tmux.stdout.on('data', (data) => {
+    data = data.toString('utf8');
+    console.log('tmux:', data);
+    socket.send(data.toString('utf8'));
+  });
+
+  tmux.on('close', () => {
+    console.log('tmux exited');
+  });
+});
+
 // Standard scheme must be registered before the app is ready
 protocol.registerStandardSchemes(['app'], { secure: true })
 function createWindow () {
   // Create the browser window.
-  win = new BrowserWindow({ width: 800, height: 600 })
+    win = new BrowserWindow({
+      width: 800,
+      height: 600,
+      // disable initial window from showing
+      show: false
+    })
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
@@ -26,6 +77,8 @@ function createWindow () {
     // Load the index.html when not in development
     win.loadURL('app://./index.html')
   }
+  // show window without setting focus
+  win.showInactive()
 
   win.on('closed', () => {
     win = null
@@ -74,3 +127,6 @@ if (isDevelopment) {
     })
   }
 }
+
+// In this file you can include the rest of your app's specific main process
+// code. You can also put them in separate files and require them here.
