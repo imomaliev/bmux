@@ -17,7 +17,7 @@ const isDevelopment = process.env.NODE_ENV !== 'production';
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
-let win;
+let win: BrowserWindow | null;
 
 const expressApp = express();
 
@@ -35,7 +35,7 @@ const socketServer = new ws.Server({server});
 
 
 socketServer.on('connection', (socket) => {
-  const tmux = childProcess.spawn('tmux', ['-C', 'attach', '-t', 'bmux2'], {tmux: true});
+  const tmux = childProcess.spawn('tmux', ['-C', 'attach', '-t', 'bmux2']);
 
   socket.on('message', (message) => {
     console.log('received:', JSON.stringify(message));
@@ -71,7 +71,7 @@ function createWindow() {
     if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
     win.loadURL(process.env.WEBPACK_DEV_SERVER_URL as string);
-    if (!process.env.IS_TEST) { win.webContents.openDevTools(); }
+    // if (!process.env.IS_TEST) { win.webContents.openDevTools(); }
   } else {
     createProtocol('app');
     // Load the index.html when not in development
