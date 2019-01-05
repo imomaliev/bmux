@@ -1,5 +1,5 @@
 // Modules to control application life and create native browser window
-const {app, BrowserWindow} = require('electron')
+import { app, BrowserWindow } from 'electron'
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -27,11 +27,11 @@ const socketServer = new ws.Server({server});
 
 
 socketServer.on('connection', (socket) => {
-  const tmux = childProcess.spawn('tmux', ['-C'], {tmux: true});
+  const tmux = childProcess.spawn('tmux', ['-C', 'attach', '-t', 'bmux2'], {tmux: true});
 
   socket.on('message', (message) => {
     console.log('received:', JSON.stringify(message));
-    tmux.stdin.write('send-keys ' + JSON.stringify(message) + '\n');
+    tmux.stdin.write(message + '\n');
   });
 
   socket.on('close', () => {
@@ -51,7 +51,7 @@ socketServer.on('connection', (socket) => {
 
 function createWindow () {
   // Create the browser window.
-  mainWindow = new BrowserWindow({width: 800, height: 600})
+  mainWindow = new BrowserWindow()
 
   // and load the index.html of the app.
   mainWindow.loadFile('index.html')

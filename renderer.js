@@ -21,18 +21,22 @@ terminal.toggleFullScreen(true);
 // terminal.fit();
 // window.scrollTo(0,document.querySelector("#terminal").scrollHeight);
 
+let keys = ''
 
 socket.onmessage = function (event) {
   event.data.toString('utf-8').split('\n').forEach(line => {
     if (line.startsWith("%output")) {
       line = line.replace(/%output %\d+ /, '');
       line = line.replace(/\\(\d+)/g, (_, match) => String.fromCharCode(parseInt(match, 8)));
+      console.log(line)
       terminal.write(line);
     }
   });
 };
 
+
 terminal.on('key', (key, event) => {
+  console.log(key, event);
   const printable = !event.altKey && !event.altGraphKey && !event.ctrlKey && !event.metaKey;
   // if (key === 'Backspace') {
   //   key = 'BSpace';
@@ -54,14 +58,21 @@ terminal.on('key', (key, event) => {
   //   key = key.replace('Arrow', '');
   // }
 
-  if (event.ctrlKey) {
-    key = `C-${event.key}`;
-  }
 
-  console.log(key);
-  console.log(event);
+  // if (event.ctrlKey) {
+  //   key = `C-${event.key}`;
+  // }
 
-  socket.send(key);
+  // keys = keys + key;
+  // if (event.key === 'Enter') {
+  //   socket.send(keys);
+  //   keys = '';
+  // } else {
+  //   terminal.write(key);
+  // }
+  socket.send(`send-keys "${key}"`);
+
+
 });
 
 // });
