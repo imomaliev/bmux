@@ -57,6 +57,7 @@ socketServer.on('connection', (socket) => {
   });
 });
 
+
 // Standard scheme must be registered before the app is ready
 protocol.registerStandardSchemes(['app'], { secure: true });
 function createWindow() {

@@ -5,24 +5,20 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 
-// This file is required by the index.html file and will
-// be executed in the renderer process for that window.
-// All of the Node.js APIs are available in this process.
-
 import ws from 'ws';
 import { Terminal } from 'xterm';
-import 'xterm/dist/xterm.css';
+import * as fullscreen from 'xterm/lib/addons/fullscreen/fullscreen';
 
 // import * as attach from 'xterm/lib/addons/attach/attach';
 // import * as fit from 'xterm/lib/addons/fit/fit';
-import * as fullscreen from 'xterm/lib/addons/fullscreen/fullscreen';
+
 @Component
 export default class Pane extends Vue {
-  public $refs!: {
+  $refs!: {
     terminal: HTMLElement,
   };
 
-  private mounted(): void {
+  mounted() {
     // Terminal.applyAddon(attach);
     // Terminal.applyAddon(fit);
     Terminal.applyAddon(fullscreen);
@@ -30,6 +26,7 @@ export default class Pane extends Vue {
     const socket = new WebSocket('ws://localhost:3000');
     const terminal = new Terminal();
 
+    // https://github.com/vuejs/vue-class-component/issues/94#issuecomment-298813210
     terminal.open(this.$refs.terminal);
     (terminal as any).toggleFullScreen(true);
     // terminal.fit();
@@ -88,3 +85,7 @@ export default class Pane extends Vue {
   }
 }
 </script>
+
+<!-- https://vuejs.org/v2/guide/single-file-components.html#What-About-Separation-of-Concerns -->
+<styes src="xterm/dist/xterm.css">
+</styes>
