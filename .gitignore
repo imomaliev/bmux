@@ -60,5 +60,8 @@ typings/
 # next.js build output
 .next
 
+#Electron-builder output
+/dist_electron
+
 # Project
-dist/
+/dist
