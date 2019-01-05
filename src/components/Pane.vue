@@ -45,6 +45,10 @@ export default class Pane extends Vue {
       });
     };
 
+    terminal.on('paste', (data) => {
+        socket.send(`send-keys "${data}"`);
+    });
+
     terminal.on('key', (key, event) => {
       console.log(key, event);
       // const printable = !event.altKey && !event.altGraphKey && !event.ctrlKey && !event.metaKey;
