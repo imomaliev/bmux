@@ -24,7 +24,7 @@ const expressApp = express();
 expressApp.use('/static', express.static('static'));
 expressApp.use(cors());
 
-expressApp.get('/', function(req, res) {
+expressApp.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
 });
 

@@ -32,7 +32,7 @@ terminal.toggleFullScreen(true);
 
 const keys = '';
 
-socket.onmessage = function(event) {
+socket.onmessage = (event) => {
   event.data.toString('utf-8').split('\n').forEach((line) => {
     if (line.startsWith('%output')) {
       line = line.replace(/%output %\d+ /, '');
