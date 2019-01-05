@@ -11,7 +11,7 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 
 import ws from 'ws';
 import { Terminal } from 'xterm';
-import '../../node_modules/xterm/dist/xterm.css'
+import 'xterm/dist/xterm.css';
 
 import * as attach from 'xterm/lib/addons/attach/attach';
 import * as fit from 'xterm/lib/addons/fit/fit';
@@ -30,14 +30,14 @@ terminal.toggleFullScreen(true);
 // terminal.fit();
 // window.scrollTo(0,document.querySelector("#terminal").scrollHeight);
 
-let keys = ''
+const keys = '';
 
-socket.onmessage = function (event) {
-  event.data.toString('utf-8').split('\n').forEach(line => {
-    if (line.startsWith("%output")) {
+socket.onmessage = function(event) {
+  event.data.toString('utf-8').split('\n').forEach((line) => {
+    if (line.startsWith('%output')) {
       line = line.replace(/%output %\d+ /, '');
       line = line.replace(/\\(\d+)/g, (_, match) => String.fromCharCode(parseInt(match, 8)));
-      console.log(line)
+      console.log(line);
       terminal.write(line);
     }
   });
@@ -91,7 +91,3 @@ export default class Pane extends Vue {
   @Prop() private msg!: string;
 }
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-</style>
